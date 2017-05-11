@@ -109,8 +109,16 @@ public class GeneralEventListener extends BadgeUpEventListener {
             if (dropEvent.getEntities().isEmpty()) {
                 return;
             }
-
-            int quantityDropped = ((Item) dropEvent.getEntities().get(0)).item().get().getCount();
+            
+            int quantityDropped = 0;
+            try {
+            	quantityDropped = ((Item) dropEvent.getEntities().get(0)).item().get().getCount();
+            } catch(IndexOutOfBoundsException err) {
+                // suppress IndexOutOfBoundsException error and bail
+            	// this fixes an "impossible" issue #27
+            	return;
+            }
+            
             processEvent(event, player, quantityDropped);
         } else {
             processEvent(event, player);
